@@ -1,20 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class AnimateCar : MonoBehaviour
 {
+    public float currentSpeed;
+    public float currentDirection;
     public float speed;
     public float rotationSpeed;
-    public GameObject CarModel;
-
+    
     private GameObject myCarInstance;
+    public GameObject CarModel;
+    public GameObject ArrowModel;
+    
+    public TextMeshPro textMesh;
+    private TMP_Text debugTextMesh;
+    
+    private Rigidbody myCarRigidBody;
+    private BoxCollider myCarBoxCollider;
+    
     private Transform leftFrontWheelTransform;
     private Transform rightFrontWheelTransform;
     private Transform leftRearWheelTransform;
     private Transform rightRearWheelTransform;
-    private Rigidbody myCarRigidBody;
-    private BoxCollider myCarBoxCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +46,9 @@ public class AnimateCar : MonoBehaviour
         rightFrontWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Right_Front");
         leftRearWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Left_Back");
         rightRearWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Right_Back");
+
+        debugTextMesh = textMesh.GetComponent<TMP_Text>();
+        debugTextMesh.text = "Rair";
     }
 
     // Update is called once per frame
@@ -53,9 +65,11 @@ public class AnimateCar : MonoBehaviour
 
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
-
-        forwardMovement = forwardInput * speed * Time.deltaTime;
-        rotationMovement = horizontalInput * rotationSpeed * Time.deltaTime;
+        
+        currentSpeed = forwardInput * speed;
+        currentDirection = horizontalInput * rotationSpeed;
+        forwardMovement = currentSpeed * Time.deltaTime;
+        rotationMovement = currentDirection * Time.deltaTime;
 
         // myCarInstance.transform.Translate(Vector3.forward * forwardMovement);
         myCarInstance.transform.Translate(0, 0, forwardMovement);
@@ -68,5 +82,9 @@ public class AnimateCar : MonoBehaviour
         rightFrontWheelTransform.Rotate(wheelIncrement, 0, 0);
         leftRearWheelTransform.Rotate(wheelIncrement, 0, 0);
         rightRearWheelTransform.Rotate(wheelIncrement, 0, 0);
+        
+        ArrowModel.transform.rotation = Quaternion.Euler(0.0f, 0.0f, currentDirection * -1);
+        
+        debugTextMesh.text = "speed: " + currentSpeed;
     }
 }
