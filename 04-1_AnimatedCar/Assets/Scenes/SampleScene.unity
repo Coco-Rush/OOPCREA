@@ -228,16 +228,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 248494655}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc31bb3abd71eef438c7994f44404fd9, type: 3}
+  m_Script: {fileID: 11500000, guid: a0426fa025a72404eadecc0a53bc64ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSpeed: 0
-  currentDirection: 0
   speed: 5
   rotationSpeed: 60
-  CarModel: {fileID: 1610265466720824, guid: 02e641040fb499c49a848e40f535164a, type: 3}
-  ArrowModel: {fileID: 2021487249}
-  textMesh: {fileID: 550024516}
+  CarModel: {fileID: 0}
 --- !u!54 &248494658
 Rigidbody:
   m_ObjectHideFlags: 0
