@@ -1,49 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class AnimateCar : MonoBehaviour
 {
-    public float speed = 5.0f;
-    public float rotationSpeed = 60.0f;
-    public GameObject CarModel;
-
+    private int incremental;
+    public float currentSpeed;
+    public float currentDirection;
+    public float speed;
+    public float rotationSpeed;
+    private float wheelhorizontal;
+    
     private GameObject myCarInstance;
-    private Rigidbody myRigidbody;
+    public GameObject CarModel;
+    public GameObject ArrowModel;
+    
+    public TextMeshPro textMesh;
+    private TMP_Text debugTextMesh;
+    
+    private Rigidbody myCarRigidBody;
     private BoxCollider myCarBoxCollider;
-
+    
     private Transform leftFrontWheelTransform;
     private Transform rightFrontWheelTransform;
     private Transform leftRearWheelTransform;
     private Transform rightRearWheelTransform;
 
-    private Transform leftFrontDoorTransform;
-    private Transform leftFrontDoorGlasTransform;
-    private Transform rightFrontDoorTransform;
-    private Transform rightFrontDoorGlasTransform;
-
     // Start is called before the first frame update
     void Start()
     {
-        myCarInstance = Instantiate(CarModel, Vector3.zero, Quaternion.identity);
-        myCarInstance.transform.localScale.Scale(new Vector3(1.1f, 1.1f, 1.1f));
+        speed = 5.0f;
+        rotationSpeed = 60.0f;
+        
+        myCarInstance = Instantiate(CarModel, new Vector3(0,1.0f,0), Quaternion.identity);
+        myCarInstance.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
         myCarInstance.transform.Translate(0, 0.42f, 0);
-
-        myRigidbody = myCarInstance.AddComponent<Rigidbody>();
-
+        
+        myCarRigidBody = myCarInstance.AddComponent<Rigidbody>();
+        myCarRigidBody.useGravity = true;
+        
         myCarBoxCollider = myCarInstance.AddComponent<BoxCollider>();
-        myCarBoxCollider.size = new Vector3(1.6f, 1.4f, 4.45f);
-        myCarBoxCollider.center = new Vector3(0, 0.3f, 0);
+        myCarBoxCollider.size = new Vector3(1.9f, 1.35f, 4.5f);
+        myCarBoxCollider.center = new Vector3(0, 0.32f, 0);
 
         leftFrontWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Left_Font");
         rightFrontWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Right_Front");
         leftRearWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Left_Back");
         rightRearWheelTransform = myCarInstance.transform.Find("Tocus_Wheel_Right_Back");
 
-        leftFrontDoorTransform = myCarInstance.transform.Find("Tocus_Door_Left_Front");
-        leftFrontDoorGlasTransform = myCarInstance.transform.Find("Tocus_Window_Door_Left_Front");
-        rightFrontDoorTransform = myCarInstance.transform.Find("Tocus_Door_Right_Front");
-        rightFrontDoorGlasTransform = myCarInstance.transform.Find("Tocus_Win_Door_Right_Front");
+        debugTextMesh = textMesh.GetComponent<TMP_Text>();
+        debugTextMesh.text = "Rair";
+
+        incremental = 0;
     }
 
     // Update is called once per frame
@@ -60,51 +69,43 @@ public class AnimateCar : MonoBehaviour
 
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
+        
+        currentSpeed = forwardInput * speed;
+        currentDirection = horizontalInput * rotationSpeed;
+        forwardMovement = currentSpeed * Time.deltaTime;
+        rotationMovement = currentDirection * Time.deltaTime;
 
-        forwardMovement = forwardInput * speed * Time.deltaTime;
-        rotationMovement = horizontalInput * rotationSpeed * Time.deltaTime;
-
+        // myCarInstance.transform.Translate(Vector3.forward * forwardMovement);
         myCarInstance.transform.Translate(0, 0, forwardMovement);
         myCarInstance.transform.Rotate(0, rotationMovement, 0);
 
-        wheelIncrement = forwardMovement * 360 / wheelCircumference;
+        wheelIncrement = forwardInput * GetIncrementalValue(); //forwardMovement * (120 + GetIncrementalValue()) / wheelCircumference;
+        wheelhorizontal = forwardInput * horizontalInput * 45;
+        Debug.Log($"ForwardInput = {forwardInput}, WheelPosition = {wheelIncrement}");
 
-        leftFrontWheelTransform.Rotate(wheelIncrement, 0, 0);
-        rightFrontWheelTransform.Rotate(wheelIncrement, 0, 0);
-        leftRearWheelTransform.Rotate(wheelIncrement, 0, 0);
-        rightRearWheelTransform.Rotate(wheelIncrement, 0, 0);
+        //leftFrontWheelTransform.Rotate(wheelIncrement, 0, 0);
+        //rightFrontWheelTransform.Rotate(wheelIncrement, 0, 0);
+        //leftRearWheelTransform.Rotate(wheelIncrement, 0, 0);
+        //rightRearWheelTransform.Rotate(wheelIncrement, 0, 0);
+        rightRearWheelTransform.localRotation = Quaternion.Euler(wheelIncrement, 0, 0);
+        rightFrontWheelTransform.localRotation = Quaternion.Euler(wheelIncrement, wheelhorizontal, 0);
+        leftRearWheelTransform.localRotation = Quaternion.Euler(wheelIncrement, 0, 0);
+        leftFrontWheelTransform.localRotation = Quaternion.Euler(wheelIncrement, wheelhorizontal, 0);
+        
+        ArrowModel.transform.rotation = Quaternion.Euler(0.0f, 0.0f, currentDirection * -1);
+        
+        debugTextMesh.text = "speed: " + currentSpeed;
+    }
 
-        if (Input.GetButton("Fire1"))
+    public int GetIncrementalValue()
+    {
+        if (incremental == 360)
         {
-            Debug.Log("Fire 1");
-            leftFrontDoorTransform.localRotation = Quaternion.Euler(0.0f, 45.0f, 0.0f);
-            leftFrontDoorTransform.localPosition = new Vector3(-0.87f, 0.0f, -0.26f);
-            leftFrontDoorGlasTransform.localRotation = Quaternion.Euler(0.0f, 45.0f, 0.0f);
-            leftFrontDoorGlasTransform.localPosition = new Vector3(-0.87f, 0.0f, -0.26f);
+            incremental = 0;
         }
-        if (Input.GetButton("Fire2"))
-        {
-            Debug.Log("Fire 2");
-            leftFrontDoorTransform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-            leftFrontDoorTransform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-            leftFrontDoorGlasTransform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-            leftFrontDoorGlasTransform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        }
-        if (Input.GetButton("Fire3"))
-        {
-            Debug.Log("Fire 3");
-            rightFrontDoorTransform.localRotation = Quaternion.Euler(0.0f, -45.0f, 0.0f);
-            rightFrontDoorTransform.localPosition = new Vector3(0.87f, 0.0f, -0.26f);
-            rightFrontDoorGlasTransform.localRotation = Quaternion.Euler(0.0f, -45.0f, 0.0f);
-            rightFrontDoorGlasTransform.localPosition = new Vector3(0.87f, 0.0f, -0.26f);
-        }
-        if (Input.GetButton("Jump"))
-        {
-            Debug.Log("Jump");
-            rightFrontDoorTransform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-            rightFrontDoorTransform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-            rightFrontDoorGlasTransform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-            rightFrontDoorGlasTransform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        }
+
+        incremental += 4;
+
+        return incremental;
     }
 }
