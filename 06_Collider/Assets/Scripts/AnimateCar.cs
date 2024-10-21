@@ -11,7 +11,7 @@ public class AnimateCar : MonoBehaviour
     public float maxRotationSpeed;
     public string textMessage;
     
-    public GameObject CarModel;
+    public GameObject carModel;
     public GameObject myCarInstance;
     
     private Transform leftFrontWheelTransform;
@@ -30,7 +30,7 @@ public class AnimateCar : MonoBehaviour
         // maxRotationSpeed = 60;
         
         //  Instatiate the car at zero location & rotation, a little larger than the model
-        // myCarInstance = Instantiate(CarModel, Vector3.zero, Quaternion.identity);
+        // myCarInstance = Instantiate(carModel, Vector3.zero, Quaternion.identity);
         // myCarInstance.transform.parent = this.transform;
         // myCarInstance.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
 
@@ -88,5 +88,26 @@ public class AnimateCar : MonoBehaviour
     void OnCollisionEnter(Collision other)
     {
         Debug.Log("Collision with " + other.gameObject.name);
+        GameObject otherObject = other.gameObject;
+        Material otherObjectMaterial = otherObject.GetComponent<MeshRenderer>().material;
+        
+        
+        if (otherObject.name == "Sphere")
+        {
+            // Change Colour
+            otherObjectMaterial.SetColor("_Color", Color.blue);
+            
+            // Destroy other Object
+            // Destroy(otherObject, 0);
+            this.textMessage = "Hit the Car💀";
+            StartCoroutine(DestroyText());
+
+        }
+    }
+
+    IEnumerator DestroyText()
+    {
+        yield return new WaitForSeconds(3);
+        this.textMessage = "";
     }
 }

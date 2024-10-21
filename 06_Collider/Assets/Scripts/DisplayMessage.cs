@@ -16,7 +16,8 @@ public class DisplayMessage : MonoBehaviour
     {
         animatedCarReference = GetComponent<AnimateCar>();
 
-        GameObject carInstanceReference = animatedCarReference.myCarInstance;
+        GameObject carInstanceReference = animatedCarReference.carModel;
+        Debug.Log(carInstanceReference);
 
         textDisplay = carInstanceReference.AddComponent<TextMeshPro>();
         textDisplay.fontSize = 4;
@@ -25,9 +26,17 @@ public class DisplayMessage : MonoBehaviour
         //  Create and configure background plane
         //  =====================================
         backPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        
+        backPlane.transform.localPosition = new Vector3(6, 3.3f, 0.1f);
+        backPlane.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+        backPlane.transform.localScale = new Vector3(0.3f, 0.3f, 0.15f);
+        
+        /*
         backPlane.transform.localPosition = new Vector3(0f, 2.2f, 0.01f);
         backPlane.transform.localRotation = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
         backPlane.transform.localScale = new Vector3(0.8f, 1.0f, 0.1f);
+        */
+        
         greyMaterial = Resources.Load("GreyMat") as Material;
         backPlane.GetComponent<MeshRenderer>().material = greyMaterial;
         backPlane.transform.SetParent(carInstanceReference.transform);
@@ -36,7 +45,9 @@ public class DisplayMessage : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {
+
         textDisplay.text = animatedCarReference.textMessage;
+
     }   // End of Update()
 }
