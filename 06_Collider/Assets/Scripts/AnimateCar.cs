@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimateCar : MonoBehaviour
@@ -90,7 +91,7 @@ public class AnimateCar : MonoBehaviour
         Debug.Log("Collision with " + other.gameObject.name);
         GameObject otherObject = other.gameObject;
         Material otherObjectMaterial = otherObject.GetComponent<MeshRenderer>().material;
-        
+        int? myint = null;
         
         if (otherObject.name == "Sphere")
         {
@@ -99,10 +100,22 @@ public class AnimateCar : MonoBehaviour
             
             // Destroy other Object
             // Destroy(otherObject, 0);
-            this.textMessage = "Hit the Car💀";
+            this.textMessage = "You hit the sphere";
             StartCoroutine(DestroyText());
+            myint = 2;
 
         }
+
+        if (!myint.HasValue)
+        {
+            Debug.Log("Is Null");
+        }
+        else
+        {
+            Debug.Log(myint.ToString() + " is not null");
+        }
+        
+        
     }
 
     IEnumerator DestroyText()
