@@ -5,26 +5,34 @@ using UnityEngine;
 
 public class AnimateCar : MonoBehaviour
 {
-    private const float wheelCircumference = 2.2f;
+    private const float WHEEL_CIRCUMFERENCE = 2.2f;
     
     public float maxSpeed;
     public float maxSteering;
     public float maxRotationSpeed;
+    private int _health;
+    private int _damage;
     public string textMessage;
+    private string _foundMessage;
     
     public GameObject carModel;
     public GameObject myCarInstance;
     
-    private Transform leftFrontWheelTransform;
-    private Transform rightFrontWheelTransform;
-    private Transform leftRearWheelTransform;
-    private Transform rightRearWheelTransform;
+    private Transform _leftFrontWheelTransform;
+    private Transform _rightFrontWheelTransform;
+    private Transform _leftRearWheelTransform;
+    private Transform _rightRearWheelTransform;
 
-    private float wheelRotation = 0;
+    private float _wheelRotation = 0;
 
     // Start is called before the first frame update
     void Awake()
     {
+        _health = 100;
+        _damage = 0;
+        this.textMessage = "";
+        this._foundMessage = "";
+        
         Debug.Log("Awake called");
         // maxSpeed = 5;
         // maxSteering = 30;
@@ -44,13 +52,10 @@ public class AnimateCar : MonoBehaviour
         myCarBoxCollider.center = new Vector3(0, 0.3f, 0);
 
         //  Create reference instances for the moveable wheels
-        leftFrontWheelTransform = transform.Find("Tocus_Wheel_Left_Font");
-        rightFrontWheelTransform = transform.Find("Tocus_Wheel_Right_Front");
-        leftRearWheelTransform = transform.Find("Tocus_Wheel_Left_Back");
-        rightRearWheelTransform = transform.Find("Tocus_Wheel_Right_Back");
-
-        textMessage = "Hello World";
-
+        _leftFrontWheelTransform = transform.Find("Tocus_Wheel_Left_Font");
+        _rightFrontWheelTransform = transform.Find("Tocus_Wheel_Right_Front");
+        _leftRearWheelTransform = transform.Find("Tocus_Wheel_Left_Back");
+        _rightRearWheelTransform = transform.Find("Tocus_Wheel_Right_Back");
     }   // End of Awake()
 
     // Update is called once per frame
@@ -75,14 +80,14 @@ public class AnimateCar : MonoBehaviour
         transform.Rotate(0, rotationMovement * forwardInput, 0);
 
         //  Animate wheels in rotation and direction (of front wheels)
-        wheelRotIncrement = forwardMovement * 360 / wheelCircumference;
-        wheelRotation += wheelRotIncrement;
+        wheelRotIncrement = forwardMovement * 360 / WHEEL_CIRCUMFERENCE;
+        _wheelRotation += wheelRotIncrement;
         wheelSteering = horizontalInput * maxSteering;
 
-        leftFrontWheelTransform.localRotation = Quaternion.Euler(wheelRotation, wheelSteering, 0);
-        rightFrontWheelTransform.localRotation = Quaternion.Euler(wheelRotation, wheelSteering, 0);
-        leftRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
-        rightRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
+        _leftFrontWheelTransform.localRotation = Quaternion.Euler(_wheelRotation, wheelSteering, 0);
+        _rightFrontWheelTransform.localRotation = Quaternion.Euler(_wheelRotation, wheelSteering, 0);
+        _leftRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
+        _rightRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
 
     }   // End of Update()
     
@@ -91,30 +96,24 @@ public class AnimateCar : MonoBehaviour
         Debug.Log("Collision with " + other.gameObject.name);
         GameObject otherObject = other.gameObject;
         Material otherObjectMaterial = otherObject.GetComponent<MeshRenderer>().material;
-        int? myint = null;
         
         if (otherObject.name == "Sphere")
         {
             // Change Colour
             otherObjectMaterial.SetColor("_Color", Color.blue);
             
-            // Destroy other Object
-            // Destroy(otherObject, 0);
             this.textMessage = "You hit the sphere";
             StartCoroutine(DestroyText());
-            myint = 2;
-
-        }
-
-        if (!myint.HasValue)
-        {
-            Debug.Log("Is Null");
-        }
-        else
-        {
-            Debug.Log(myint.ToString() + " is not null");
         }
         
+        // Exercise SW06 Nr. 4
+        Obstacle foundObstacle = otherObject.GetComponent<Obstacle>();
+        if (foundObstacle)
+        {
+            Debug.Log("Found Obstacle");
+            _foundMessage = "Found Obstacle - it's the traffic cone";
+            
+        }
         
     }
 
