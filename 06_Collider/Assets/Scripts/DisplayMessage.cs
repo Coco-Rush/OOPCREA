@@ -27,9 +27,9 @@ public class DisplayMessage : MonoBehaviour
         //  =====================================
         backPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         
-        backPlane.transform.localPosition = new Vector3(6, 3.3f, 0.1f);
+        backPlane.transform.localPosition = new Vector3(0f, 5f, 0.1f);
         backPlane.transform.localRotation = Quaternion.Euler(-90, 0, 0);
-        backPlane.transform.localScale = new Vector3(0.3f, 0.3f, 0.15f);
+        backPlane.transform.localScale = new Vector3(0.5f, 0.3f, 0.15f);
         
         /*
         backPlane.transform.localPosition = new Vector3(0f, 2.2f, 0.01f);

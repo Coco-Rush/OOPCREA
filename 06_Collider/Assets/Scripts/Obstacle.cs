@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
+    public int damage;
     public GameObject obstacleModel;
 
     protected GameObject obstacleInstance;
@@ -27,13 +28,13 @@ public class Obstacle : MonoBehaviour
         Debug.Log("Obstacle Position: " + this.obstacleInstance.transform.position);
         
         // Basically like "Human Tom = new Human();"
-        obstacleRigidbody = this.gameObject.AddComponent<Rigidbody>();
-        obstacleBoxCollider = this.gameObject.AddComponent<BoxCollider>();
+        obstacleRigidbody = this.obstacleInstance.AddComponent<Rigidbody>();
+        obstacleBoxCollider = this.obstacleInstance.GetComponent<BoxCollider>();
         
         // When a Box Collider is instantiated, the center is always at the origin (0, 0, 0) and the size is (1, 1, 1)
         
-        obstacleBoxCollider.size = new Vector3(0.5f, 0.5f, 0.5f);
-        obstacleBoxCollider.center = new Vector3(0, 0.5f, 0);
+        // obstacleBoxCollider.size = new Vector3(0.5f, 0.5f, 0.5f);
+        // obstacleBoxCollider.center = new Vector3(0, 0.5f, 0);
 
     }
 }
