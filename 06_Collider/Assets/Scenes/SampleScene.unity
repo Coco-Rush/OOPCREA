@@ -144,7 +144,6 @@ MonoBehaviour:
   maxRotationSpeed: 60
   textMessage: 
   carModel: {fileID: 212392304}
-  myCarInstance: {fileID: 0}
 --- !u!114 &212392310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +156,106 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 887e3a263a4a6be46b866c05fe9daeea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &432715417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 432715419}
+  - component: {fileID: 432715418}
+  m_Layer: 0
+  m_Name: Exploder_Top
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &432715418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432715417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c9a2bd7024846c448508f69005f0c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 12
+  obstacleModel: {fileID: 125962, guid: f6eefa5c1fffe0b45a38d3356e57a5d0, type: 3}
+  healthDeductions: 5
+  damagePoints: 4
+  fireType: {fileID: 8829451551789304542, guid: e91fa0fac941e714e8c4d5709097019f, type: 3}
+--- !u!4 &432715419
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432715417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9, y: 1, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &461164259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 461164261}
+  - component: {fileID: 461164260}
+  m_Layer: 0
+  m_Name: HelperKit_Top
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &461164260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461164259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3441f9fecc67f644ba891ae8aa1348ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 19
+  obstacleModel: {fileID: 8198909352693198359, guid: 84ecf1efb046f604e8edf8818733b7fc, type: 3}
+  normalHeal: 20
+  rotationSpeed: 1
+  resizeScaleX: 0.1
+  resizeScaleY: 0.1
+  resizeScaleZ: 0.1
+--- !u!4 &461164261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461164259}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &498193461
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,6 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f77278d735420a342bd874ec1743451c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
   obstacleModel: {fileID: 3027026634398967259, guid: 91f52158c9778b8449097ce986f1b0b3, type: 3}
 --- !u!4 &527853827
 Transform:
@@ -627,6 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f77278d735420a342bd874ec1743451c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 5
   obstacleModel: {fileID: 3027026634398967259, guid: 91f52158c9778b8449097ce986f1b0b3, type: 3}
 --- !u!4 &1469483677
 Transform:
@@ -717,3 +818,5 @@ SceneRoots:
   - {fileID: 498193465}
   - {fileID: 527853827}
   - {fileID: 1469483677}
+  - {fileID: 432715419}
+  - {fileID: 461164261}
