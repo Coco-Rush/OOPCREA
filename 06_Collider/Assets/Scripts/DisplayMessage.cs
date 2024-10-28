@@ -16,7 +16,7 @@ public class DisplayMessage : MonoBehaviour
     {
         animatedCarReference = GetComponent<AnimateCar>();
 
-        GameObject carInstanceReference = animatedCarReference.carModel;
+        GameObject carInstanceReference = GameObject.Find("Tocus");
         Debug.Log(carInstanceReference);
 
         textDisplay = carInstanceReference.AddComponent<TextMeshPro>();
@@ -27,7 +27,7 @@ public class DisplayMessage : MonoBehaviour
         //  =====================================
         backPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         
-        backPlane.transform.localPosition = new Vector3(0f, 5f, 0.1f);
+        backPlane.transform.localPosition = new Vector3(0f, 3f, 0.1f);
         backPlane.transform.localRotation = Quaternion.Euler(-90, 0, 0);
         backPlane.transform.localScale = new Vector3(0.5f, 0.3f, 0.15f);
         

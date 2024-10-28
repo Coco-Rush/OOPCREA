@@ -51,7 +51,7 @@ public class HelperKit : Obstacle
             this.transform.position = 
                 new Vector3(
                 _carInstanceReference.transform.position.x, 
-                _carInstanceReference.transform.position.y + 2f, 
+                _carInstanceReference.transform.position.y + 2.75f, 
                 _carInstanceReference.transform.position.z);
         }
     }

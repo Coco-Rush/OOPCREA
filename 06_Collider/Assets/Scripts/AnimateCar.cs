@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AnimateCar : MonoBehaviour
+public class AnimateCar : MonoBehaviour, IHitAction
 {
     private const float WHEEL_CIRCUMFERENCE = 2.2f;
 
     private int _health;
-    private int _repair;
     private string _foundMessage;
+    private bool _isJumping;
     
     public float maxSpeed;
     public float maxSteering;
@@ -24,14 +24,17 @@ public class AnimateCar : MonoBehaviour
     private Transform _leftFrontWheelTransform;
     private Transform _rightFrontWheelTransform;
     private Transform _leftRearWheelTransform;
+
+    private Rigidbody _myRigidbody;
+    private BoxCollider _myCarBoxCollider;
     
     private float _wheelRotation = 0;
     void Awake()
     {
         _health = 100;
-        _repair = 0;
         this.textMessage = "";
         this._foundMessage = "";
+        _isJumping = false;
         
         Debug.Log("Awake called");
         // maxSpeed = 5;
@@ -44,7 +47,7 @@ public class AnimateCar : MonoBehaviour
         // myCarInstance.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
 
         //  Add rigidbody to this class, not to the car!
-        Rigidbody myRigidbody = gameObject.AddComponent<Rigidbody>();
+        _myRigidbody = gameObject.AddComponent<Rigidbody>();
 
         //  Add collider to this class, not the car!
         BoxCollider myCarBoxCollider = gameObject.AddComponent<BoxCollider>();
@@ -61,14 +64,23 @@ public class AnimateCar : MonoBehaviour
     {
         float horizontalInput;
         float forwardInput;
+        float jumpInput;
 
         float forwardMovement;
         float rotationMovement;
         float wheelRotIncrement;
         float wheelSteering;
+        
+        
 
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
+        jumpInput = Input.GetAxis("Jump");
+
+        if (jumpInput != 0 && !_isJumping)
+        {
+            Impact();
+        }
 
         forwardMovement = forwardInput * maxSpeed * Time.deltaTime;
         rotationMovement = horizontalInput * maxRotationSpeed * Time.deltaTime;
@@ -87,11 +99,17 @@ public class AnimateCar : MonoBehaviour
         _leftRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
         _rightRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
     } // End of Update()
-    
+
+    IEnumerator DestroyText()
+    {
+        yield return new WaitForSeconds(3);
+        this.textMessage = "";
+    }
+
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.gameObject);
-        Debug.Log("Collision with " + other.gameObject.name);
+        // Debug.Log(other.gameObject);
+        // Debug.Log("Collision with " + other.gameObject.name);
         GameObject otherObject = other.gameObject;
         // Material otherObjectMaterial = otherObject.GetComponent<MeshRenderer>().material;
         
@@ -111,24 +129,32 @@ public class AnimateCar : MonoBehaviour
         if (otherObjectParent.GetComponent<HelperKit>())
         {
             HelperKit foundHelperKit = otherObject.transform.parent.GetComponent<HelperKit>();
-            Debug.Log("Found Helper Kit");
+            
             this._foundMessage = "Found the Helper Kit";
             this._health += foundHelperKit.GetHeal();
             this.textMessage = $"Health: {_health} - Heal: {foundHelperKit.GetHeal()} \n {_foundMessage}";
+            
             otherObject.GetComponent<BoxCollider>().enabled = false;
             otherObjectParent.GetComponent<HelperKit>().rotationSpeed = 20;
             otherObjectParent.GetComponent<HelperKit>().StartScaleResizeWhenObjectInstanceCollected();
             StartCoroutine(DestroyText());
+            
+            // Debug Messages
+            Debug.Log("Found Helper Kit");
             return;
         }
 
         if (otherObjectParent.GetComponent<Exploder>())
         {
             Exploder foundExploder = otherObject.transform.parent.GetComponent<Exploder>();
-            Debug.Log("Found Damager");
+            
             this._health -= foundExploder.GetDamage();
             this.textMessage = $"Health: {_health} - Damage: {foundExploder.GetDamage()}";
+            
             StartCoroutine(DestroyText());
+            
+            // Debug Messages
+            Debug.Log("Found Exploder");
             return;
 
         }
@@ -138,18 +164,40 @@ public class AnimateCar : MonoBehaviour
         if (otherObjectParent.GetComponent<Obstacle>())
         {
             Obstacle foundObstacle = otherObject.transform.parent.GetComponent<Obstacle>();
-            Debug.Log("Found Obstacle");
+            
             this._foundMessage = "Found the traffic cone";
             this._health -= foundObstacle.damage;
             this.textMessage = $"Health: {_health} - Damage: {foundObstacle.damage} \n {_foundMessage}";
-            Debug.Log(this.textMessage);
+            
             StartCoroutine(DestroyText());
+
+            // Debug Messages
+            Debug.Log("Found Obstacle");
+            Debug.Log(this.textMessage);
         }
     }
 
-    IEnumerator DestroyText()
+    // After Pressing SpaceBar the Car should Jump exactly 1 meter high. 
+    public void Impact()
     {
-        yield return new WaitForSeconds(3);
-        this.textMessage = "";
+        _isJumping = true;
+        _myRigidbody.AddForce(Vector3.up * 8, ForceMode.Impulse);
+        StartCoroutine(StopJump());
+    }
+
+    public void Impact(int collisionSpeed)
+    {
+        
+    }
+
+    public void Impact(float collisionSpeed)
+    {
+        
+    }
+    
+    IEnumerator StopJump()
+    {
+        yield return new WaitForSeconds(2);
+        _isJumping = false;
     }
 }

@@ -4,20 +4,29 @@ using UnityEngine;
 
 public class Exploder : Damager
 {
+    private MeshCollider _obstacleMeshCollider;
     public GameObject fireType;
     // Start is called before the first frame update
     // private new Collider obstacleBoxCollider;
     protected new void Start()
     {
         base.Start();
-        //obstacleBoxCollider = obstacleInstance.GetComponent<MeshCollider>();
-        obstacleBoxCollider.size = new Vector3(0.5f, 1f, 0.5f);
+        Destroy(obstacleInstance.GetComponent<MeshCollider>());
+        obstacleBoxCollider = obstacleInstance.AddComponent<BoxCollider>();
+        obstacleBoxCollider.center = new Vector3(0, 0.5f, 0);
+        obstacleBoxCollider.size = new Vector3(0.75f, 1f, 0.75f);
+        // _obstacleMeshCollider = obstacleInstance.GetComponent<MeshCollider>();
+        // _obstacleMeshCollider.transform.
+        // _obstacleMeshCollider.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        // _obstacleMeshCollider.
         
         // deactivate mesh collider of the oil barrel
-        obstacleInstance.GetComponent<Collider>().enabled = false;
+        Debug.Log(_obstacleMeshCollider);
+        // obstacleInstance.GetComponent<MeshCollider>().enabled = false;
         
         // deactivate /destroy the rigidbody of the oil barrel
-        Destroy(obstacleInstance.GetComponent<Rigidbody>());
+        // Destroy(obstacleInstance.GetComponent<Rigidbody>());
+        Debug.Log("this is the car instance inside exploder: " + carInstanceReference);
 
     }
 
@@ -29,8 +38,10 @@ public class Exploder : Damager
     
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Rair");
         GameObject otherObj = collision.gameObject;
-        if (otherObj.GetComponent<AnimateCar>())
+        Debug.Log("Collision detected with " + otherObj.name);
+        if (otherObj == carInstanceReference)
         {
             GameObject fireInstance = Instantiate(fireType, gameObject.transform.localPosition, Quaternion.identity);
             fireInstance.transform.parent = transform;

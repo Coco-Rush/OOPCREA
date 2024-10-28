@@ -6,13 +6,13 @@ public class Damager : Obstacle
 {
     public int healthDeductions;
     public int damagePoints;
-    private GameObject _carInstanceReference;
+    protected GameObject carInstanceReference;
     
     // Start is called before the first frame update
     protected new void Start()
     {
         base.Start();
-        _carInstanceReference = GameObject.Find("Tocus");
+        carInstanceReference = GameObject.Find("Tocus");
     }
 
     // Update is called once per frame
