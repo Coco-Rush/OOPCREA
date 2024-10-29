@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class HelperKit : Obstacle
+public class HelperKit : Obstacle, IHitAction
 {
     public int normalHeal;
     public float rotationSpeed;
@@ -54,6 +54,18 @@ public class HelperKit : Obstacle
                 _carInstanceReference.transform.position.y + 2.75f, 
                 _carInstanceReference.transform.position.z);
         }
+    }
+    public void Impact()
+    {
+        
+    }
+    public void Impact(int collisionSpeed)
+    {
+        
+    }
+    public void Impact(float collisionSpeed)
+    {
+        
     }
 
     public int GetHeal()

@@ -11,6 +11,10 @@ public class AnimateCar : MonoBehaviour, IHitAction
     private int _health;
     private string _foundMessage;
     private bool _isJumping;
+    private float _forwardMovement;
+    private float _rotationMovement;
+    private float _wheelRotIncrement;
+    private float _wheelSteering;
     
     public float maxSpeed;
     public float maxSteering;
@@ -66,10 +70,7 @@ public class AnimateCar : MonoBehaviour, IHitAction
         float forwardInput;
         float jumpInput;
 
-        float forwardMovement;
-        float rotationMovement;
-        float wheelRotIncrement;
-        float wheelSteering;
+        
         
         
 
@@ -82,22 +83,22 @@ public class AnimateCar : MonoBehaviour, IHitAction
             Impact();
         }
 
-        forwardMovement = forwardInput * maxSpeed * Time.deltaTime;
-        rotationMovement = horizontalInput * maxRotationSpeed * Time.deltaTime;
+        _forwardMovement = forwardInput * maxSpeed * Time.deltaTime;
+        _rotationMovement = horizontalInput * maxRotationSpeed * Time.deltaTime;
 
         //  Apply movement to this class, then copy its position to the car
-        transform.Translate(0, 0, forwardMovement);
-        transform.Rotate(0, rotationMovement * forwardInput, 0);
+        transform.Translate(0, 0, _forwardMovement);
+        transform.Rotate(0, _rotationMovement * forwardInput, 0);
 
         //  Animate wheels in rotation and direction (of front wheels)
-        wheelRotIncrement = forwardMovement * 360 / WHEEL_CIRCUMFERENCE;
-        _wheelRotation += wheelRotIncrement;
-        wheelSteering = horizontalInput * maxSteering;
+        _wheelRotIncrement = _forwardMovement * 360 / WHEEL_CIRCUMFERENCE;
+        _wheelRotation += _wheelRotIncrement;
+        _wheelSteering = horizontalInput * maxSteering;
         
-        _leftFrontWheelTransform.localRotation = Quaternion.Euler(_wheelRotation, wheelSteering, 0);
-        _rightFrontWheelTransform.localRotation = Quaternion.Euler(_wheelRotation, wheelSteering, 0);
-        _leftRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
-        _rightRearWheelTransform.Rotate(wheelRotIncrement, 0, 0);
+        _leftFrontWheelTransform.localRotation = Quaternion.Euler(_wheelRotation, _wheelSteering, 0);
+        _rightFrontWheelTransform.localRotation = Quaternion.Euler(_wheelRotation, _wheelSteering, 0);
+        _leftRearWheelTransform.Rotate(_wheelRotIncrement, 0, 0);
+        _rightRearWheelTransform.Rotate(_wheelRotIncrement, 0, 0);
     } // End of Update()
 
     IEnumerator DestroyText()
@@ -112,6 +113,7 @@ public class AnimateCar : MonoBehaviour, IHitAction
         // Debug.Log("Collision with " + other.gameObject.name);
         GameObject otherObject = other.gameObject;
         // Material otherObjectMaterial = otherObject.GetComponent<MeshRenderer>().material;
+        Impact(this._forwardMovement);
         
         if (otherObject.name == "Sphere")
         {

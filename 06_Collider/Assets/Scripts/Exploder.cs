@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Exploder : Damager
 {
     private MeshCollider _obstacleMeshCollider;
     public GameObject fireType;
+    private List<GameObject> fireInstances = new List<GameObject>();
     // Start is called before the first frame update
     // private new Collider obstacleBoxCollider;
     protected new void Start()

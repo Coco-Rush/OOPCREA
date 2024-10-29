@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Damager : Obstacle
+public class Damager : Obstacle, IHitAction
 {
     public int healthDeductions;
     public int damagePoints;
@@ -17,6 +17,19 @@ public class Damager : Obstacle
 
     // Update is called once per frame
     void Update()
+    {
+        
+    }
+
+    public void Impact()
+    {
+        
+    }
+    public void Impact(int collisionSpeed)
+    {
+        
+    }
+    public void Impact(float collisionSpeed)
     {
         
     }
