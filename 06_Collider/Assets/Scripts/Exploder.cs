@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class Exploder : Damager
+public class Exploder : Damager, IHitAction
 {
     private MeshCollider _obstacleMeshCollider;
     public GameObject fireType;
@@ -28,7 +28,7 @@ public class Exploder : Damager
         
         // deactivate /destroy the rigidbody of the oil barrel
         // Destroy(obstacleInstance.GetComponent<Rigidbody>());
-        Debug.Log("this is the car instance inside exploder: " + carInstanceReference);
+        Debug.Log("this is the car instance inside exploder: " + _carInstanceReference);
 
     }
 
@@ -43,11 +43,16 @@ public class Exploder : Damager
         Debug.Log("Rair");
         GameObject otherObj = collision.gameObject;
         Debug.Log("Collision detected with " + otherObj.name);
-        if (otherObj == carInstanceReference)
+        if (otherObj == _carInstanceReference)
         {
             GameObject fireInstance = Instantiate(fireType, gameObject.transform.localPosition, Quaternion.identity);
             fireInstance.transform.parent = transform;
             
         }
+    }
+
+    public new void Impact()
+    {
+        _carInstanceReference.GetComponent<AnimateCar>().UpdateHealth(GetDamage());
     }
 }

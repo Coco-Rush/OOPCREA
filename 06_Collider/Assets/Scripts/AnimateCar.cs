@@ -9,6 +9,7 @@ public class AnimateCar : MonoBehaviour, IHitAction
     private const float WHEEL_CIRCUMFERENCE = 2.2f;
 
     private int _health;
+    private int _lastHeal;
     private string _foundMessage;
     private bool _isJumping;
     private float _forwardMovement;
@@ -70,17 +71,13 @@ public class AnimateCar : MonoBehaviour, IHitAction
         float forwardInput;
         float jumpInput;
 
-        
-        
-        
-
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
         jumpInput = Input.GetAxis("Jump");
 
         if (jumpInput != 0 && !_isJumping)
         {
-            Impact();
+            Jump();
         }
 
         _forwardMovement = forwardInput * maxSpeed * Time.deltaTime;
@@ -126,10 +123,22 @@ public class AnimateCar : MonoBehaviour, IHitAction
 
         if (!otherObject.transform.parent) return;
         GameObject otherObjectParent = otherObject.transform.parent.gameObject;
+        if (!otherObjectParent.TryGetComponent<IHitAction>(out IHitAction hitAction))
+        {
+            return;
+        }
+        
+        // HelperKit
+        hitAction.Impact();
+        this._foundMessage = "Found the " + hitAction.GetType().Name;
+        this.textMessage = $"Health: {_health} - Value: {_lastHeal} \n {_foundMessage}";
+        StartCoroutine(DestroyText());
+        Debug.Log("Found " + hitAction.GetType().Name);
 
         // Exercise SW06 Nr. 5
-        if (otherObjectParent.GetComponent<HelperKit>())
+        /*if (otherObjectParent.GetComponent<HelperKit>())
         {
+            // Call Impact function of HelperKit with Interface
             HelperKit foundHelperKit = otherObject.transform.parent.GetComponent<HelperKit>();
             
             this._foundMessage = "Found the Helper Kit";
@@ -144,10 +153,12 @@ public class AnimateCar : MonoBehaviour, IHitAction
             // Debug Messages
             Debug.Log("Found Helper Kit");
             return;
-        }
+        }*/
 
-        if (otherObjectParent.GetComponent<Exploder>())
+        /*if (otherObjectParent.GetComponent<Exploder>())
         {
+            // Call Impact function of HelperKit with Interface
+            
             Exploder foundExploder = otherObject.transform.parent.GetComponent<Exploder>();
             
             this._health -= foundExploder.GetDamage();
@@ -159,11 +170,11 @@ public class AnimateCar : MonoBehaviour, IHitAction
             Debug.Log("Found Exploder");
             return;
 
-        }
+        }*/
 
         // Exercise SW06 Nr. 4
 
-        if (otherObjectParent.GetComponent<Obstacle>())
+        /*if (otherObjectParent.GetComponent<Obstacle>())
         {
             Obstacle foundObstacle = otherObject.transform.parent.GetComponent<Obstacle>();
             
@@ -176,15 +187,25 @@ public class AnimateCar : MonoBehaviour, IHitAction
             // Debug Messages
             Debug.Log("Found Obstacle");
             Debug.Log(this.textMessage);
-        }
+        }*/
     }
 
     // After Pressing SpaceBar the Car should Jump exactly 1 meter high. 
-    public void Impact()
+    public void Jump()
     {
         _isJumping = true;
         _myRigidbody.AddForce(Vector3.up * 8, ForceMode.Impulse);
         StartCoroutine(StopJump());
+    }
+    public void UpdateHealth(int health)
+    {
+        this._lastHeal = health;
+        this._health += health;
+    }
+
+    public void Impact()
+    {
+        
     }
 
     public void Impact(int collisionSpeed)

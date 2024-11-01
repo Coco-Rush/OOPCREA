@@ -18,7 +18,7 @@ public class HelperKit : Obstacle, IHitAction
     private float _scaleIncrementY;
     private float _scaleIncrementZ;
     private bool _isResizing = false;
-    private GameObject _carInstanceReference;
+    private bool _ihitable;
 
 
     // Start is called before the first frame update
@@ -30,7 +30,8 @@ public class HelperKit : Obstacle, IHitAction
         // obstacleBoxCollider.enabled = false;
         
         obstacleRigidbody.useGravity = false;
-        _carInstanceReference = GameObject.Find("Tocus");
+        _ihitable = _carInstanceReference.TryGetComponent<IHitAction>(out _);
+        Debug.Log("Is IHitAction: " + _ihitable);
     }
 
     private void Update()
@@ -55,26 +56,30 @@ public class HelperKit : Obstacle, IHitAction
                 _carInstanceReference.transform.position.z);
         }
     }
-    public void Impact()
+    public new void Impact()
+    {
+        obstacleInstance.GetComponent<BoxCollider>().enabled = false;
+        rotationSpeed = 20;
+        StartScaleResizeWhenObjectInstanceCollected();
+        
+        _carInstanceReference.GetComponent<AnimateCar>().UpdateHealth(GetHeal());
+    }
+    public new void Impact(int collisionSpeed)
     {
         
     }
-    public void Impact(int collisionSpeed)
-    {
-        
-    }
-    public void Impact(float collisionSpeed)
+    public new void Impact(float collisionSpeed)
     {
         
     }
 
-    public int GetHeal()
+    protected int GetHeal()
     {
         this._smallHeal = normalHeal / 2;
         return _smallHeal;
     }
 
-    public void StartScaleResizeWhenObjectInstanceCollected()
+    private void StartScaleResizeWhenObjectInstanceCollected()
     {
         _scaleIncrementX = (resizeScaleX - obstacleInstance.transform.localScale.x) / 300;
         _scaleIncrementY = (resizeScaleY - obstacleInstance.transform.localScale.y) / 300;

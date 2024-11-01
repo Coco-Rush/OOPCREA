@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Damager : Obstacle, IHitAction
 {
-    public int healthDeductions;
+    private int _healthDeductions;
     public int damagePoints;
-    protected GameObject carInstanceReference;
     
     // Start is called before the first frame update
     protected new void Start()
     {
         base.Start();
-        carInstanceReference = GameObject.Find("Tocus");
     }
 
     // Update is called once per frame
@@ -21,21 +20,28 @@ public class Damager : Obstacle, IHitAction
         
     }
 
-    public void Impact()
+    public new void Impact()
     {
         
     }
-    public void Impact(int collisionSpeed)
+    public new void Impact(int collisionSpeed)
     {
         
     }
-    public void Impact(float collisionSpeed)
+    public new void Impact(float collisionSpeed)
     {
         
     }
     
-    public int GetDamage()
+    protected int GetDamage()
     {
-        return this.damagePoints;
+        return CalculateDamage();
+    }
+
+    private int CalculateDamage()
+    {
+        this._healthDeductions = 0 - this.damagePoints;
+        Debug.Log(_healthDeductions);
+        return this._healthDeductions;
     }
 }
