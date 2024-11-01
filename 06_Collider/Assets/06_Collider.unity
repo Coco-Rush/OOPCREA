@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f77278d735420a342bd874ec1743451c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
   obstacleModel: {fileID: 3027026634398967259, guid: 91f52158c9778b8449097ce986f1b0b3, type: 3}
 --- !u!4 &572877517
 Transform:
@@ -267,8 +266,8 @@ Transform:
   m_GameObject: {fileID: 1017914495}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 50, y: 0.5, z: 50}
+  m_LocalPosition: {x: 0, y: -1, z: 228.7}
+  m_LocalScale: {x: 50, y: 0.5, z: 500}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -302,9 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9a2bd7024846c448508f69005f0c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
   obstacleModel: {fileID: 128898, guid: 75becad70c078cf4ca47bbb8cd4d8784, type: 3}
-  healthDeductions: 3
   damagePoints: 5
   fireType: {fileID: 1255053967005034563, guid: 858e79faf6de940498a11b25374053d0, type: 3}
 --- !u!4 &1223943443
@@ -351,7 +348,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3441f9fecc67f644ba891ae8aa1348ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
   obstacleModel: {fileID: 8198909352693198359, guid: 84ecf1efb046f604e8edf8818733b7fc, type: 3}
   normalHeal: 10
   rotationSpeed: 1
@@ -402,7 +398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f77278d735420a342bd874ec1743451c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
   obstacleModel: {fileID: 3027026634398967259, guid: 91f52158c9778b8449097ce986f1b0b3, type: 3}
 --- !u!4 &1353818604
 Transform:
@@ -505,11 +500,11 @@ Transform:
   m_GameObject: {fileID: 1370836130}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2792043, y: -0, z: -0, w: 0.9602318}
-  m_LocalPosition: {x: 0, y: 7.16, z: -15.33}
+  m_LocalPosition: {x: 0, y: 6.16, z: -15.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1603756575}
   m_LocalEulerAnglesHint: {x: 32.425, y: 0, z: 0}
 --- !u!1 &1489962562
 GameObject:
@@ -675,7 +670,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4013073016293618, guid: 02e641040fb499c49a848e40f535164a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1370836133}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1610265466720824, guid: 02e641040fb499c49a848e40f535164a, type: 3}
       insertIndex: -1
@@ -717,12 +715,17 @@ MonoBehaviour:
   maxSteering: 20
   maxRotationSpeed: 60
   textMessage: 
+  accelerationSpeed: 15
   carModel: {fileID: 1603756571}
+--- !u!4 &1603756575 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4013073016293618, guid: 02e641040fb499c49a848e40f535164a, type: 3}
+  m_PrefabInstance: {fileID: 1603756570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1370836133}
   - {fileID: 1489962564}
   - {fileID: 1017914499}
   - {fileID: 1603756570}

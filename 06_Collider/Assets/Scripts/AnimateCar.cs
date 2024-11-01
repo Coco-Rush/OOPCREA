@@ -12,6 +12,7 @@ public class AnimateCar : MonoBehaviour, IHitAction
     private int _lastHeal;
     private string _foundMessage;
     private bool _isJumping;
+    private bool _isAccelerating;
     private float _forwardMovement;
     private float _rotationMovement;
     private float _wheelRotIncrement;
@@ -21,6 +22,7 @@ public class AnimateCar : MonoBehaviour, IHitAction
     public float maxSteering;
     public float maxRotationSpeed;
     public string textMessage;
+    public float accelerationSpeed;
 
     public GameObject carModel;
     private GameObject _myCarInstance;
@@ -70,16 +72,25 @@ public class AnimateCar : MonoBehaviour, IHitAction
         float horizontalInput;
         float forwardInput;
         float jumpInput;
+        float accelerateInput;
 
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
         jumpInput = Input.GetAxis("Jump");
+        accelerateInput = Input.GetAxis("Fire3");
 
         if (jumpInput != 0 && !_isJumping)
         {
             Jump();
         }
-
+        
+        // SetMovement Method here
+        if (accelerateInput != 0 && !_isAccelerating)
+        {
+            forwardInput *= accelerationSpeed;
+            StartCoroutine(Accelerate());
+            StartCoroutine(StopAccelerate());
+        }
         _forwardMovement = forwardInput * maxSpeed * Time.deltaTime;
         _rotationMovement = horizontalInput * maxRotationSpeed * Time.deltaTime;
 
@@ -134,60 +145,6 @@ public class AnimateCar : MonoBehaviour, IHitAction
         this.textMessage = $"Health: {_health} - Value: {_lastHeal} \n {_foundMessage}";
         StartCoroutine(DestroyText());
         Debug.Log("Found " + hitAction.GetType().Name);
-
-        // Exercise SW06 Nr. 5
-        /*if (otherObjectParent.GetComponent<HelperKit>())
-        {
-            // Call Impact function of HelperKit with Interface
-            HelperKit foundHelperKit = otherObject.transform.parent.GetComponent<HelperKit>();
-            
-            this._foundMessage = "Found the Helper Kit";
-            this._health += foundHelperKit.GetHeal();
-            this.textMessage = $"Health: {_health} - Heal: {foundHelperKit.GetHeal()} \n {_foundMessage}";
-            
-            otherObject.GetComponent<BoxCollider>().enabled = false;
-            otherObjectParent.GetComponent<HelperKit>().rotationSpeed = 20;
-            otherObjectParent.GetComponent<HelperKit>().StartScaleResizeWhenObjectInstanceCollected();
-            StartCoroutine(DestroyText());
-            
-            // Debug Messages
-            Debug.Log("Found Helper Kit");
-            return;
-        }*/
-
-        /*if (otherObjectParent.GetComponent<Exploder>())
-        {
-            // Call Impact function of HelperKit with Interface
-            
-            Exploder foundExploder = otherObject.transform.parent.GetComponent<Exploder>();
-            
-            this._health -= foundExploder.GetDamage();
-            this.textMessage = $"Health: {_health} - Damage: {foundExploder.GetDamage()}";
-            
-            StartCoroutine(DestroyText());
-            
-            // Debug Messages
-            Debug.Log("Found Exploder");
-            return;
-
-        }*/
-
-        // Exercise SW06 Nr. 4
-
-        /*if (otherObjectParent.GetComponent<Obstacle>())
-        {
-            Obstacle foundObstacle = otherObject.transform.parent.GetComponent<Obstacle>();
-            
-            this._foundMessage = "Found the traffic cone";
-            this._health -= foundObstacle.damage;
-            this.textMessage = $"Health: {_health} - Damage: {foundObstacle.damage} \n {_foundMessage}";
-            
-            StartCoroutine(DestroyText());
-
-            // Debug Messages
-            Debug.Log("Found Obstacle");
-            Debug.Log(this.textMessage);
-        }*/
     }
 
     // After Pressing SpaceBar the Car should Jump exactly 1 meter high. 
@@ -197,6 +154,8 @@ public class AnimateCar : MonoBehaviour, IHitAction
         _myRigidbody.AddForce(Vector3.up * 8, ForceMode.Impulse);
         StartCoroutine(StopJump());
     }
+
+    
     public void UpdateHealth(int health)
     {
         this._lastHeal = health;
@@ -222,5 +181,16 @@ public class AnimateCar : MonoBehaviour, IHitAction
     {
         yield return new WaitForSeconds(2);
         _isJumping = false;
+    }
+    IEnumerator StopAccelerate()
+    {
+        yield return new WaitForSeconds(2);
+        _isAccelerating = false;
+    }
+    IEnumerator Accelerate()
+    {
+        // Press Shift Button to accelerate the car
+        yield return new WaitForSeconds(2);
+        _isAccelerating = true;
     }
 }
