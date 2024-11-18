@@ -8,6 +8,7 @@ public class Actor : MonoBehaviour
     private GameObject _instantiatedGameObject;
     private SphereCollider _sphereCollider;
     private Rigidbody _rigidbody;
+    private Material _material;
     
     private float _verticalInput;
     private float _horizontalInput;
@@ -22,7 +23,13 @@ public class Actor : MonoBehaviour
         _instantiatedGameObject = Instantiate(_simpleGameObjectSphere, Vector3.zero, Quaternion.identity);
         Destroy(_simpleGameObjectSphere);
         _instantiatedGameObject.transform.SetParent(gameObject.transform);
+        _material = new Material(Shader.Find("Standard"))
+        {
+            color = Color.red
+        };
         
+        _instantiatedGameObject.GetComponent<MeshRenderer>().material = _material;
+
         _instantiatedGameObject.transform.localPosition = Vector3.zero;
         _instantiatedGameObject.transform.localScale = Vector3.one * 0.05f;
         _instantiatedGameObject.transform.localRotation = Quaternion.identity;
