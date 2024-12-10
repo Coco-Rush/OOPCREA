@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,7 @@ public class Actor : MonoBehaviour
 {
     private GameObject _simpleGameObjectSphere;
     private GameObject _instantiatedGameObject;
-    private SphereCollider _sphereCollider;
-    private Rigidbody _rigidbody;
-    private Material _material;
+    
     
     private float _verticalInput;
     private float _horizontalInput;
@@ -19,7 +18,7 @@ public class Actor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _simpleGameObjectSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        /*_simpleGameObjectSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         _instantiatedGameObject = Instantiate(_simpleGameObjectSphere, Vector3.zero, Quaternion.identity);
         Destroy(_simpleGameObjectSphere);
         _instantiatedGameObject.transform.SetParent(gameObject.transform);
@@ -31,12 +30,16 @@ public class Actor : MonoBehaviour
         _instantiatedGameObject.GetComponent<MeshRenderer>().material = _material;
 
         _instantiatedGameObject.transform.localPosition = Vector3.zero;
-        _instantiatedGameObject.transform.localScale = Vector3.one * 0.05f;
+        _instantiatedGameObject.transform.localScale = Vector3.one * 0.2f;
         _instantiatedGameObject.transform.localRotation = Quaternion.identity;
         
         _sphereCollider = _instantiatedGameObject.GetComponent<SphereCollider>();
         _rigidbody = _instantiatedGameObject.AddComponent<Rigidbody>();
-        _rigidbody.mass = 0.1f;
+        _sphereCollider.enabled = true;
+        _rigidbody.Sleep();
+        gameObject.AddComponent<SphereCollider>();
+        gameObject.AddComponent<Rigidbody>();
+        _rigidbody.mass = 0.1f;*/
     }
 
     // Update is called once per frame
@@ -48,10 +51,5 @@ public class Actor : MonoBehaviour
         _horizontalMovement = _horizontalInput * Time.deltaTime * speed;
         
         gameObject.transform.Translate(_horizontalMovement, 0, _verticalMovement);
-    }
-    
-    private void OnCollisionEnter(Collision other)
-    {
-        Debug.Log("Collision with " + other.gameObject.name);
     }
 }
